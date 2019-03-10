@@ -22,7 +22,15 @@
 ### 启动顺序
 
 1. x86段寄存器的字段含义和功能有哪些？
+   1. 代码段寄存器CS: Code segment register. 正在运行的代码的段基址
+   2. 数据段寄存器DS: Data segment register. 当前程序存放数据的段基址
+   3. 堆栈段寄存器SS: Stack segment register. 当前堆栈底部的段基址
+   4. 附加段寄存器ES: Extra segment register. 附加数据段的段基址
 2. x86描述符特权级DPL、当前特权级CPL和请求特权级RPL的含义是什么？在哪些寄存器中存在这些字段？对应的访问条件是什么？
+   1. DPL:（descriptor priviledge level）：描述符特权级
+   2. CPL（ current priviledge level）：当前进程的特权级，位于CS寄存器低两位
+   3. RPL（ request priviledge level）：请求特权级
+   4. CPL于RPL均不小于DPL才能访问
 3. 分析可执行文件格式elf的格式（无需回答）
 
 ### 4.1 C函数调用的实现
@@ -30,6 +38,8 @@
 ### 4.2 x86中断处理过程
 
 1. x86/RV中断处理中硬件压栈内容？用户态中断和内核态中断的硬件压栈有什么不同？
+   1. 当前被打断程序使用的eflags, cs, eip, errorCode信息。如果有特权级变化，还需要保存用户栈ss和esp的值。
+   2. 如果是用户态中断，会有特权级的变化，而内核态中断则不会变化。
 2. 为什么在用户态的中断响应要使用内核堆栈？
 3. x86中trap类型的中断门与interrupt类型的中断门有啥设置上的差别？如果在设置中断门上不做区分，会有什么可能的后果?
 
