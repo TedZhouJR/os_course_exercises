@@ -57,12 +57,12 @@ ring3时需要压入ss与esp，而且需要切换至内核态的栈
 
 4. 如何利用int和iret指令完成不同特权级的切换？
 
-
+使用int指令产生中断，进入内核态，iret恢复到用户态
 
 
 5. TSS和Task Register的作用是什么？
 
-TSS存储了Task的状态信息，
+TSS存储了Task的状态信息，Task Register缓存了TSS内容，为CPU访问TSS提供了直接的地址
 
  > [Task state segment](https://en.wikipedia.org/wiki/Task_state_segment)
 
@@ -81,9 +81,13 @@ TSS存储了Task的状态信息，
 
 ### 7.4 了解UCORE建立段/页表
 
-1. 分析MMU的使能过程，尽可能详细地分析在执行进入保护械的代码“movl %eax, %cr0 ; ljmp $CODE_SEL, $0x0”时，CPU的状态和寄存器内容的变化。
-
+1. 分析MMU的使能过程，尽可能详细地分析在执行进入保护械的代码“movl %eax, %cr0 ; ljmp $CODE_SEL, ​$0x0”时，CPU的状态和寄存器内容的变化。
 2. 分析页表的建立过程；
+   1. 分配4K地址作为页目录，初始化这块内存
+   2. 填好页目录表和页表各项
+   3. 建立好映射
+   4. enable页机制
+   5. 更新GDT
 
 ## 个人思考题
 
